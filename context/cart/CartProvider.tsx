@@ -1,6 +1,10 @@
-import { FC, useReducer } from 'react';
-import { CartContext, cartReducer } from './';
+import { FC, useEffect, useReducer } from 'react';
+import Cookie from 'js-cookie';
+
 import { ICartProduct } from '../../interfaces';
+
+import { CartContext, cartReducer } from './';
+
 
 
 interface Props {
@@ -19,6 +23,23 @@ const CART_INITIAL_STATE: CartState = {
 export const CartProvider:FC<Props> = ({ children }) => {
 
 const [state, dispatch] = useReducer( cartReducer, CART_INITIAL_STATE);
+
+useEffect(() => {
+    try {
+        const cookieProducts = Cookie.get('cart') ? JSON.parse(Cookie.get('cart')!): []
+        dispatch({ type: '[Cart] - LoadCart from cookies | storage', payload: cookieProducts})
+    } catch (error) {
+        dispatch({ type: '[Cart] - LoadCart from cookies | storage', payload: []})
+    }
+}, [])
+
+
+useEffect(() => {
+    Cookie.set('cart', JSON.stringify( state.cart ))
+}, [state.cart])
+
+
+
 
 const addProductToCart = ( product: ICartProduct ) => {
     // si no esta el producto en el carrito, lo agrego
@@ -42,12 +63,23 @@ const addProductToCart = ( product: ICartProduct ) => {
     dispatch({ type: '[Cart] - Update products in cart', payload: updatedProducts })
 }
 
+const updateCartQuantity = ( product: ICartProduct ) => {
+    dispatch({ type: '[Cart] - Change cart quantity', payload: product });
+}
+
+
+const removeCartProduct = ( product: ICartProduct ) => {
+    dispatch({ type: '[Cart] - Remove product in cart', payload: product });
+}
+
 return ( 
     <CartContext.Provider value={{
         ...state,
 
         // methods
         addProductToCart,
+        removeCartProduct,
+        updateCartQuantity
     }}>
         { children }
     </CartContext.Provider>

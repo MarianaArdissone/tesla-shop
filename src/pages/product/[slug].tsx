@@ -1,8 +1,8 @@
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from "next/router";
 import LinkButton from "../../../components/mui-next/linkButton/LinkButton";
-import { Box, Chip, Grid, Typography } from "@mui/material";
+import { Box, Chip, Grid, Typography, Button } from "@mui/material";
 
 import { ShopLayout } from "../../../components/layouts";
 import { ProductSlideshow, SizeSelector } from "../../../components/products";
@@ -10,6 +10,7 @@ import { ItemCounter } from "../../../components/ui";
 
 import { dbProducts } from "../../../database";
 import { ICartProduct, IProduct, ISize } from "../../../interfaces";
+import { CartContext } from "../../../context";
 
 
 
@@ -21,6 +22,7 @@ interface Props {
 const ProductPage:FC<Props> = ({ product }) => {
 
     const router = useRouter();
+    const { addProductToCart } = useContext( CartContext )
 
     const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
         _id: product._id, 
@@ -35,7 +37,7 @@ const ProductPage:FC<Props> = ({ product }) => {
     })
 
     const selectedSize = ( size: ISize ) => {
-        setTempCartProduct ( currentProduct => ({
+        setTempCartProduct( currentProduct => ({
             ...currentProduct,
             size
         }));
@@ -51,8 +53,8 @@ const ProductPage:FC<Props> = ({ product }) => {
     const onAddProduct = () => {
         if( !tempCartProduct.size ) return;
         // llamar la accion del context para agregar al carrito
-        console.log({tempCartProduct});
-        router.push('/cart')
+        addProductToCart(tempCartProduct);
+        router.push('/cart');
     }
 
     return (
@@ -98,7 +100,7 @@ const ProductPage:FC<Props> = ({ product }) => {
                                         ? 'Agregar al carrito'
                                         : 'Seleccione una talla'
                                 }
-                            </LinkButton>
+                            </LinkButton> 
                             )
                             : (
                                 <Chip label='No hay disponibles' color="error" variant="outlined" />

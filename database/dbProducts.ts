@@ -19,6 +19,8 @@ export const getProductBySlug = async( slug: string ): Promise<IProduct | null> 
 interface ProductSlug{
     slug: string;
 }
+
+
 export const getAllProductSlug = async():Promise<ProductSlug[]> => {
 
     await db.connect();
@@ -26,4 +28,32 @@ export const getAllProductSlug = async():Promise<ProductSlug[]> => {
     await db.disconnect();
 
     return slugs;
+}
+
+
+export const GetProductsByTerm = async ( term:string): Promise<IProduct[]> => {
+    
+    term = term.toString().toLowerCase();
+
+    await db.connect();
+    const products = await Product.find({
+        $text: { $search: term }
+    })
+    .select('title images price inStock slug -_id')
+    .lean();
+
+    await db.disconnect();
+
+    return products;
+}
+
+
+export const getAllProducts = async():Promise<IProduct[]> => {
+
+    await db.connect();
+    const products = await Product.find().lean();
+    await db.disconnect();
+
+    return JSON.parse(JSON.stringify( products ));
+
 }

@@ -1,4 +1,4 @@
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Typography, Grid, Chip } from '@mui/material';
 
 import { ShopLayout } from "../../../components/layouts";
@@ -16,7 +16,7 @@ const columns: GridColDef[] = [
         headerName: 'Pagada',
         description: 'Muestra informacion si esta pagada la orden o no',
         width: 200,
-        renderCell: ( params: GridRenderCellParams ) => {
+        renderCell: ( params ) => {
             return (
                 params.row.paid
                 ? <Chip color="success" label='Pagada' variant="outlined" />
@@ -30,7 +30,7 @@ const columns: GridColDef[] = [
         headerName: 'Ver orden',
         width: 200,
         sortable: false,
-        renderCell: ( params: GridRenderCellParams ) => {
+        renderCell: ( params ) => {
             return (
                 <Link href={`/orders/${ params.row.id }`} underline="always">
                     Ver orden
@@ -60,8 +60,8 @@ const HistoryPage = () => {
                     <DataGrid 
                         rows={ rows }
                         columns={ columns }
-                        // pageSize={ 10 }
-                        pageSizeOptions={[10]}
+                        pageSize={ 10 }
+                        rowsPerPageOptions={[10]}
                     />
                 </Grid>
 

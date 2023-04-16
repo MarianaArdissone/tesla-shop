@@ -34,5 +34,5 @@ http://localhost:3000/api/seed
 
 - Nombre: Mariana Trinidad Ardissone
 - Correo electrónico: mariana.ardissone7@gmail.com
-- GitHub: @Mar_ardissone
+- GitHub: MarianaArdissone
 - Portfolio: https://mardissone.com.ar/

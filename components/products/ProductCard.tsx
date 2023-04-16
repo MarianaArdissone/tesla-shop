@@ -1,5 +1,5 @@
 import { FC, useMemo, useState } from 'react'
-import { Box, Card, CardActionArea, CardMedia, Grid, Typography } from '@mui/material'
+import { Box, Card, CardActionArea, CardMedia, Chip, Grid, Typography } from '@mui/material'
 
 import { IProduct } from '../../interfaces'
 import Link from '../mui-next/link/Link';
@@ -28,8 +28,19 @@ export const ProductCard:FC<Props>= ({ product }) => {
                 onMouseLeave={ () => setIsHovered(false) }
             >
                 <Card>
-                    <Link href={`/product/${ product.slug }`}>       
+                    <Link href={`/product/${ product.slug }`}>     
                         <CardActionArea>
+                            {
+                                (product.inStock === 0 ) && (
+                                    <Chip
+                                        color='primary'
+                                        label='No hay disponibles'
+                                        sx={{
+                                            position:'absolute', zIndex: 99, top: '10px', left: '10px'
+                                        }}
+                                    />
+                                )
+                            }
                             <CardMedia 
                                 component='img'
                                 className='fadeIn'

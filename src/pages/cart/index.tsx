@@ -1,7 +1,7 @@
 import { Box, Card, CardContent, Divider, Grid, Typography } from "@mui/material"
 import { ShopLayout } from "../../../components/layouts"
 import LinkButton from "../../../components/mui-next/linkButton/LinkButton"
-import { CartList, OrdenSummary } from "../../../components/cart"
+import { CartList, OrderSummary } from "../../../components/cart"
 
 const CartPage = () => {
     return (
@@ -19,7 +19,7 @@ const CartPage = () => {
                             <Typography variant="h2"> Orden </Typography>
                             <Divider sx={{ my:1 }}/>
 
-                            <OrdenSummary/>
+                            <OrderSummary/>
 
                             <Box sx={{ mt: 3 }}>
                                 <LinkButton href="/" color="secondary" className="circular-btn" fullWidth>

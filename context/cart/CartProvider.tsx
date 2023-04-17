@@ -13,10 +13,20 @@ interface Props {
 
 export interface CartState {
     cart: ICartProduct[];
+    isLoaded: boolean
+    numberOfItems: number;
+    subTotal: number;
+    tax: number;
+    total: number;
 }
 
 const CART_INITIAL_STATE: CartState = {
     cart: [],
+    isLoaded: false,
+    numberOfItems: 0,
+    subTotal: 0,
+    tax: 0,
+    total: 0
 }
 
 
@@ -25,17 +35,36 @@ export const CartProvider:FC<Props> = ({ children }) => {
 const [state, dispatch] = useReducer( cartReducer, CART_INITIAL_STATE);
 
 useEffect(() => {
-    try {
-        const cookieProducts = Cookie.get('cart') ? JSON.parse(Cookie.get('cart')!): []
-        dispatch({ type: '[Cart] - LoadCart from cookies | storage', payload: cookieProducts})
-    } catch (error) {
-        dispatch({ type: '[Cart] - LoadCart from cookies | storage', payload: []})
-    }
+        try {
+            const cookieProducts = Cookie.get('cart') ? JSON.parse(Cookie.get('cart')!) : []
+            dispatch({ type: '[Cart] - LoadCart from cookies | storage', payload: cookieProducts})
+        } catch (error) {
+            dispatch({ type: '[Cart] - LoadCart from cookies | storage', payload: []})
+        }
+// eslint-disable-next-line react-hooks/exhaustive-deps
 }, [])
 
 
 useEffect(() => {
-    Cookie.set('cart', JSON.stringify( state.cart ))
+    if (state.isLoaded) Cookie.set('cart', JSON.stringify( state.cart ))
+}, [state.cart, state.isLoaded])
+
+
+useEffect(() => {
+
+    const numberOfItems = state.cart.reduce( ( prev, current ) => current.quantity + prev,  0 );
+    const subTotal = state.cart.reduce( ( prev, current ) => (current.price * current.quantity) + prev,  0 );
+    const taxRate = Number(process.env.NEXT_PUBLIC_TAX_RATE || 0);
+
+
+    const orderSummary = {
+        numberOfItems,
+        subTotal,
+        tax: subTotal * taxRate,
+        total: subTotal * (taxRate + 1)
+    }
+    
+    dispatch({ type: '[Cart] - Update order summary', payload: orderSummary });
 }, [state.cart])
 
 

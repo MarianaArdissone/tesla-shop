@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Product } from '../../../models';
+import { Product, User } from '../../../models';
 import { db, seedDatabase } from '../../../database';
 
 type Data = {
@@ -13,6 +13,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
 
     await db.connect();
+
+    await User.deleteMany();
+    await User.insertMany( seedDatabase.initialData.users );
 
     // purgamos la base de datos solo en la coleccion de productos (si hicimos alguna modificacion)
     await Product.deleteMany();

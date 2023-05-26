@@ -1,4 +1,4 @@
-# Next.js Teslo shop
+# Next.js Telo Shop
 Para correr localmente, se necesita la base de datos.
 ```
 docker-compose up -d
@@ -28,11 +28,3 @@ Llamara:
 ```
 http://localhost:3000/api/seed
 ```
-
-
-## Contacto
-
-- Nombre: Mariana Trinidad Ardissone
-- Correo electrónico: mariana.ardissone7@gmail.com
-- GitHub: MarianaArdissone
-- Portfolio: https://mardissone.com.ar/

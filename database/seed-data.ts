@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs';
 
-
 interface SeedProduct {
     description: string;
     images: string[];
@@ -24,10 +23,14 @@ interface SeedUser {
 type ValidSizes = 'XS'|'S'|'M'|'L'|'XL'|'XXL'|'XXXL';
 type ValidTypes = 'shirts'|'pants'|'hoodies'|'hats';
 
+
+
 interface SeedData {
     users: SeedUser[];
     products: SeedProduct[];
 }
+
+
 
 
 
